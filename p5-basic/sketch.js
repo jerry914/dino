@@ -3,6 +3,12 @@ var wave;
 var wave2;
 var button;
 var playing = false;
+
+let box, drum, myPart;
+let boxPat = [1,0,0,2,0,2,0,0];
+let drumPat = [0,1,1,0,2,0,1,0];
+
+
 let uImg;
 let uImg2;
 let dinoJump;
@@ -14,23 +20,20 @@ function preload() {
 	uImg=loadImage('https://jerry914.github.io/pplant/assect/dino left ft.png');
 	uImg2=loadImage('https://jerry914.github.io/pplant/assect/dino right ft.png');
 	dinoJump=loadImage('https://jerry914.github.io/pplant/assect/Dino.png');
+
+	box = loadSound('assets/hanning.wav');
+	drum = loadSound('assets/kick.wav');
 }
 
 
 function setup() {
-	createCanvas(500, 500);
+	createCanvas(windowWidth,windowHeight);
 	setupOsc(12000, 3334);
 	dino = new Dino();
-	wave = new p5.Oscillator();
-	wave.setType('square');
-	wave2 = new p5.Oscillator();
-	wave2.setType('square');
-	button = createButton('play/pause');
-	button.mousePressed(toggle);
 }
 
 function draw() {
-	background(0, 0, 255);
+	background(250, 250, 250);
 	fill(0, 255, 0);
 	ellipse(x, y, 100, 100);
 	fill(0);
@@ -44,6 +47,7 @@ function draw() {
 
 function playNote(key){
 	dino.jump();
+	myPart.start();
 	console.log(key);
 	// key = key+;
 	var freqence = 440*pow(2,(key)/12);
@@ -61,20 +65,41 @@ function stopNote(){
 	wave2.amp(0,0.2);
 }
 
+function playBox(time, playbackRate) {
+	box.rate(playbackRate);
+	box.play(time);
+}
+
+function playDrum(time, playbackRate) {
+	drum.rate(playbackRate);
+	drum.play(time);
+}
+
 function toggle() {
 	if (!playing) {
+		wave = new p5.Oscillator();
+		wave.setType('square');
+		wave2 = new p5.Oscillator();
+		wave2.setType('square');
 		wave.start();
 		wave.amp(0);
 		wave2.start();
 		wave2.amp(0);
+
+		masterVolume(0.1);
+		let boxPhrase = new p5.Phrase('box', playBox, boxPat);
+		let drumPhrase = new p5.Phrase('drum', playDrum, drumPat);
+		myPart = new p5.Part();
+		myPart.addPhrase(boxPhrase);
+		myPart.addPhrase(drumPhrase);
+		myPart.setBPM(60);
+		masterVolume(0.1);
+
 		playing = true;
 	} else {
 		wave.amp(0, 1);
 		playing = false;
 	}
-}
-function getBaseLog(x, y) {
-	return Math.log(y) / Math.log(x);
 }
 
 function receiveOsc(address, value) {
