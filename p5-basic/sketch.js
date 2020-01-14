@@ -6,11 +6,11 @@ var playing = false;
 
 let box, drum, myPart;
 let jump,ach,die;
-let boxPat = [1,1,1,0,1,1,0,0,1,1,1,0];
-let drumPat = [0,1,1,0,2,0,1,0,5,5,1,0];
-let jumpPat = [1,2,3,4,5,6,7,8,9,0,0,0];
-let achPat = [1,0,0,2,0,2,0,0,0,0,0,0];
-let diePat = [1,0,0,2,0,2,0,0,0,0,1,1];
+let boxPat = [1,0,1,0,1,0,1,0];
+let drumPat = [1,1,0,2,0,1,1,0,2,0,0];
+let jumpPat = [1,2,3,4,5,6,7,8];
+let achPat = [1,0,0,2,0,2,0];
+let diePat = [1,0,0,2,0,2,0,0];
 
 let noise;
 let noiseLooper;
@@ -33,7 +33,7 @@ function preload() {
 
 	bImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/ground.png');
 
-	box = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hanning.wav');
+	box = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hanning.mp3');
 	drum = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/kick.wav');
 	jump = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/jump.mp3');
 	ach = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/achieve.wav');
@@ -126,8 +126,10 @@ function receiveOsc(address, value) {
 				playPhrase(int(storeAdd[2].replace('toggle','')));
 			}
 		}
-		else if (storeAdd[2].search('multitoggle')>=0){
-			
+		else if (storeAdd[2].search('fader')>=0){
+			if(int(storeAdd[2].replace('fader','')==1)){
+				changeVolume(value);
+			}
 		}
 	}
 	

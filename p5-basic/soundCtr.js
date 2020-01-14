@@ -32,7 +32,7 @@ function playNote(key){
 	var freqence = 440*pow(2,(key)/12);
 	console.log(freqence);
 	wave.freq(freqence);
-	wave.amp(0.2,0.1);
+	wave.amp(0.2,0.01);
 	freqence = 440*pow(2,(key-3)/12);
 	console.log(freqence);
 	wave2.freq(freqence);
@@ -94,6 +94,10 @@ function stopPhrase(phrase){
         default:
             break;
     }
+}
+
+function changeVolume(value){
+    masterVolume(parseFloat(value));
 }
 
 function myRemovePhrase (name) {  
