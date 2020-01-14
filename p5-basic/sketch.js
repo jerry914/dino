@@ -31,7 +31,7 @@ function preload() {
 	uImg2=loadImage('https://jerry914.github.io/pplant/assect/dino right ft.png');
 	dinoJump=loadImage('https://jerry914.github.io/pplant/assect/Dino.png');
 
-	bImg = loadImage('ground.png');
+	bImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/ground.png');
 
 	box = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hanning.wav');
 	drum = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/kick.wav');
