@@ -77,29 +77,29 @@ function playPhrase(phrase){
 function stopPhrase(phrase){
     switch (phrase){
         case 1:
-            myRemovePhrase('boxPhrase');
+            myRemovePhrase('box');
             break;
         case 2:
-            myRemovePhrase('drumPhrase');
+            myRemovePhrase('drum');
             break;
         case 3:
-            myRemovePhrase('jumpPhrase');
+            myRemovePhrase('jump');
             break;
         case 4:
-            myRemovePhrase(achPhrase);
+            myRemovePhrase('ach');
             break;
         case　5:
-            myRemovePhrase(diePhrase);
+            myRemovePhrase('die');
             break;
         default:
             break;
     }
 }
 
-function myRemovePhrase (name) { 
-    for (var i in myPart) { 
-        if (this.phrases[i].name === name) { 
-            this.phrases.splice(i, 1); 
+function myRemovePhrase (name) {  
+    for (var i in myPart.phrases) { 
+        if (myPart.phrases[i].name === name) { 
+            myPart.phrases.splice(i, 1); 
         } 
     } 
 }; 
