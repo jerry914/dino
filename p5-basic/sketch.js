@@ -6,11 +6,14 @@ var playing = false;
 
 let box, drum, myPart;
 let jump,ach,die;
-let boxPat = [1,0,1,0,1,0,1,0];
-let drumPat = [1,1,0,2,0,1,1,0,2,0,0];
-let jumpPat = [1,2,3,4,5,6,7,8];
-let achPat = [1,0,0,2,0,2,0];
-let diePat = [1,0,0,2,0,2,0,0];
+let boxPat = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 0, 0, 0];
+let drumPat = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0,0, 0, 1, 0,0, 0];
+let jumpPat = [1, 3,3, 1, 1, 2, 2, 0, 0, 1, 1, 3, 9, 3,2, 2];
+let achPat = [1, 0, 0, 0, 0, 0,  0, 0,1, 1, 1, 1, 0, 0, 1, 0];
+let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
+
+let filter = [];
+let filterFreq, filterRes;
 
 let noise;
 let noiseLooper;
@@ -23,8 +26,18 @@ let aniCount=0 ;
 let ground = [];
 let bImg;
 
-
 let dino;
+
+let angle = 0;
+particles = [];
+let angleValue = 1;
+let radderValue = -0.05;
+let sizeValue = 200;
+let sinValue = -1;
+let colorValue = 10;
+let axValue = 0;
+let ayValue = 0;
+let flowerPlaying = false;
 
 function preload() {
 	uImg=loadImage('https://jerry914.github.io/pplant/assect/dino left ft.png');
@@ -46,11 +59,11 @@ function setup() {
 	setupOsc(12000, 3334);
 	dino = new Dino();
 
-	
+	colorMode(HSB, 255)
 }
 
 function draw() {
-	background(250, 250, 250);
+	background('#08192D');
 	fill(0, 255, 0);
 	ellipse(x, y, 100, 100);
 	fill(0);
@@ -58,7 +71,14 @@ function draw() {
 	dino.show();
 	dino.move();
 	// aniCount++;
-	
+
+	if(flowerPlaying){
+		generateParticle();
+	if (angle < PI * 2) {
+		angle += angleValue;
+	} else
+		angle = 0;
+	}
 }
 
 
@@ -77,8 +97,22 @@ function toggle() {
 		myPart = new p5.Part();
 		myPart.setBPM(60);
 		myPart.loop();
+		
+		for(var i=0;i<5;i++){
+			filter[i] = new p5.LowPass();
+		}
+		
+		box.disconnect();
+		box.connect(filter[0]);
+		drum.disconnect();
+		drum.connect(filter[1]);
+		jump.disconnect();
+		jump.connect(filter[2]);
+		ach.disconnect();
+		ach.connect(filter[3]);
+		die.disconnect();
+		die.connect(filter[4]);
 		masterVolume(0.3);
-
 		// noise = new p5.Noise('pink');
 		// noiseLooper = new p5.SoundLoop(function(timeFromNow){
 		// 	noise.start();
@@ -110,7 +144,7 @@ function receiveOsc(address, value) {
 			}
 			else if(value == 1){
 				if(storeAdd[1]==1){
-					playNote(int(storeAdd[2].replace('push',''))+int(12));
+					playNote(int(storeAdd[2].replace('push',''))+int(-48));
 				}
 				else{
 					playNote(int(storeAdd[2].replace('push','')));
@@ -119,17 +153,60 @@ function receiveOsc(address, value) {
 			}
 		}
 		else if (storeAdd[2].search('toggle')>=0){
-			if(value == 0){
-				stopPhrase(int(storeAdd[2].replace('toggle','')));
+			if(int(storeAdd[2].replace('toggle',''))==22){
+				if(value==0){
+					flowerPlaying=false;
+				}
+				else{
+					flowerPlaying=true;
+				}
+			}
+			else if(int(storeAdd[2].replace('toggle',''))==23){
+				axValue = 1;
 			}
 			else{
-				playPhrase(int(storeAdd[2].replace('toggle','')));
+				if(value == 0){
+					stopPhrase(int(storeAdd[2].replace('toggle','')));
+				}
+				else{
+					playPhrase(int(storeAdd[2].replace('toggle','')));
+				}
 			}
 		}
 		else if (storeAdd[2].search('fader')>=0){
-			if(int(storeAdd[2].replace('fader','')==1)){
+			if(int(storeAdd[2].replace('fader','')==8)){
 				changeVolume(value);
 			}
+			else if(int(storeAdd[2].replace('fader','')<=5)){
+				soundFilter(value,int(storeAdd[2].replace('fader','')));
+				switch(int(storeAdd[2].replace('fader',''))){
+					case 1:
+						angleValue = map(value,0,1,0,0.1);
+						break;
+					case 2:
+						radderValue = map(value,0,1,-0.05,0.05);
+						break;
+					case 3:
+						sizeValue = map(value,0,1,0,400);
+						break;
+					case 4:
+						sinValue = map(value,0,1,-1,1);
+						break;
+					case 5:
+						colorValue = map(value,0,1,0,255);
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		else if (storeAdd[2].search('nav')>=0){
+			if(int(storeAdd[2].replace('2nav',''))==1){
+				angleValue = 1;
+			}
+		}
+		else if (storeAdd[2].search('rotary')>=0){
+			soundPan(value);
 		}
 	}
 	
@@ -156,4 +233,7 @@ function setupOsc(oscPortIn, oscPortOut) {
 			receiveOsc(msg[0], msg.splice(1));
 		}
 	});
+}
+function windowResized(){
+	resizeCanvas(windowWidth,windowHeight);
 }

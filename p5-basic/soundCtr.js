@@ -26,17 +26,17 @@ function playDie(time, playbackRate) {
 
 function playNote(key){
 	dino.jump(key);
-	myPart.start();
-	console.log(key);
+	// myPart.start();
+	// console.log(key);
 	// key = key+;
 	var freqence = 440*pow(2,(key)/12);
 	console.log(freqence);
 	wave.freq(freqence);
 	wave.amp(0.2,0.01);
-	freqence = 440*pow(2,(key-3)/12);
-	console.log(freqence);
-	wave2.freq(freqence);
-	wave2.amp(0.1,0.1);
+	// freqence = 440*pow(2,(key-3)/12);
+	// console.log(freqence);
+	// wave2.freq(freqence);
+	// wave2.amp(0.1,0.1);
 }
 
 function stopNote(){
@@ -98,6 +98,21 @@ function stopPhrase(phrase){
 
 function changeVolume(value){
     masterVolume(parseFloat(value));
+}
+
+function soundFilter(value,idx){
+    filterFreq = map(value, 0, 1, 10, 22050);
+    // filterRes = map(mouseY, 0, height, 15, 5);
+    filterRes = 5;
+    filter[idx-1].set(filterFreq, filterRes);
+}
+function soundPan(value){
+    var panValue = value-0.5;
+    box.pan(panValue);
+    drum.pan(panValue);
+    jump.pan(panValue);
+    ach.pan(panValue);
+    die.pan(panValue);
 }
 
 function myRemovePhrase (name) {  
