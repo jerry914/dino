@@ -46,19 +46,7 @@ function setup() {
 	setupOsc(12000, 3334);
 	dino = new Dino();
 
-	let boxPhrase = new p5.Phrase('box', playBox, boxPat);
-	let drumPhrase = new p5.Phrase('drum', playDrum, drumPat);
-	let jumpPhrase = new p5.Phrase('jump', playJump, jumpPat);
-	let achPhrase = new p5.Phrase('ach', playAch,achPat);
-	let diePhrase = new p5.Phrase('ach', playDie,diePat);
-	myPart = new p5.Part();
-	myPart.addPhrase(boxPhrase);
-	myPart.addPhrase(drumPhrase);
-	myPart.addPhrase(jumpPhrase);
-	myPart.addPhrase(achPhrase);
-	myPart.addPhrase(diePhrase);
-	myPart.setBPM(60);
-	masterVolume(0.3);
+	
 }
 
 function draw() {
@@ -74,27 +62,6 @@ function draw() {
 }
 
 
-function playNote(key){
-	dino.jump(key);
-	myPart.start();
-	console.log(key);
-	// key = key+;
-	var freqence = 440*pow(2,(key)/12);
-	console.log(freqence);
-	wave.freq(freqence);
-	wave.amp(0.2,0.1);
-	freqence = 440*pow(2,(key-3)/12);
-	console.log(freqence);
-	wave2.freq(freqence);
-	wave2.amp(0.1,0.1);
-}
-
-function stopNote(){
-	wave.amp(0,0.2);
-	wave2.amp(0,0.2);
-}
-
-
 function toggle() {
 	if (!playing) {
 		wave = new p5.Oscillator();
@@ -106,23 +73,20 @@ function toggle() {
 		wave2.start();
 		wave2.amp(0);
 
-		masterVolume(1);
-		let boxPhrase = new p5.Phrase('box', playBox, boxPat);
-		let drumPhrase = new p5.Phrase('drum', playDrum, drumPat);
+		
 		myPart = new p5.Part();
-		myPart.addPhrase(boxPhrase);
-		myPart.addPhrase(drumPhrase);
 		myPart.setBPM(60);
-		masterVolume(1);
+		myPart.loop();
+		masterVolume(0.3);
 
-		noise = new p5.Noise('pink');
-		noiseLooper = new p5.SoundLoop(function(timeFromNow){
-			noise.start();
-			noise.amp(0.3);
-			noise.amp(0,0.2);
-			background(255 * (noiseLooper.iterations % 2));
-		}, 2);
-		noiseLooper.start();
+		// noise = new p5.Noise('pink');
+		// noiseLooper = new p5.SoundLoop(function(timeFromNow){
+		// 	noise.start();
+		// 	noise.amp(0.3);
+		// 	noise.amp(0,0.2);
+		// 	background(255 * (noiseLooper.iterations % 2));
+		// }, 2);
+		// noiseLooper.start();
 
 		playing = true;
 	} else {
@@ -153,6 +117,17 @@ function receiveOsc(address, value) {
 				}
 				
 			}
+		}
+		else if (storeAdd[2].search('toggle')>=0){
+			if(value == 0){
+				stopPhrase(int(storeAdd[2].replace('toggle','')));
+			}
+			else{
+				playPhrase(int(storeAdd[2].replace('toggle','')));
+			}
+		}
+		else if (storeAdd[2].search('multitoggle')>=0){
+			
 		}
 	}
 	
