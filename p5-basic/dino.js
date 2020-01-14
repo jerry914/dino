@@ -17,9 +17,9 @@ class Dino {
     
     }
 
-    jump() {
+    jump(key) {
     if (this.y == height - this.r) {
-        this.vy = -35;
+        this.vy = -(key*2);
     }
     
     }

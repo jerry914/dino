@@ -5,14 +5,24 @@ var button;
 var playing = false;
 
 let box, drum, myPart;
-let boxPat = [1,0,0,2,0,2,0,0];
-let drumPat = [0,1,1,0,2,0,1,0];
+let jump,ach,die;
+let boxPat = [1,0,0,2,0,2,0,0,2,2,3,0];
+let drumPat = [0,1,1,0,2,0,1,0,5,5,1,0];
+let jumpPat = [1,2,3,4,5,6,7,8,9,0,0,0];
+let achPat = [1,0,0,2,0,2,0,0,0,0,0,0];
+let diePat = [1,0,0,2,0,2,0,0,0,0,1,1];
 
+let noise;
+let noiseLooper;
 
 let uImg;
 let uImg2;
 let dinoJump;
 let aniCount=0 ;
+
+let ground = [];
+let bImg;
+
 
 let dino;
 
@@ -21,8 +31,13 @@ function preload() {
 	uImg2=loadImage('https://jerry914.github.io/pplant/assect/dino right ft.png');
 	dinoJump=loadImage('https://jerry914.github.io/pplant/assect/Dino.png');
 
-	box = loadSound('assets/hanning.wav');
-	drum = loadSound('assets/kick.wav');
+	bImg = loadImage('ground.png');
+
+	box = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hanning.wav');
+	drum = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/kick.wav');
+	jump = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/jump.mp3');
+	ach = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/achieve.wav');
+	die = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/demise.wav');
 }
 
 
@@ -30,6 +45,20 @@ function setup() {
 	createCanvas(windowWidth,windowHeight);
 	setupOsc(12000, 3334);
 	dino = new Dino();
+
+	let boxPhrase = new p5.Phrase('box', playBox, boxPat);
+	let drumPhrase = new p5.Phrase('drum', playDrum, drumPat);
+	let jumpPhrase = new p5.Phrase('jump', playJump, jumpPat);
+	let achPhrase = new p5.Phrase('ach', playAch,achPat);
+	let diePhrase = new p5.Phrase('ach', playDie,diePat);
+	myPart = new p5.Part();
+	myPart.addPhrase(boxPhrase);
+	myPart.addPhrase(drumPhrase);
+	myPart.addPhrase(jumpPhrase);
+	myPart.addPhrase(achPhrase);
+	myPart.addPhrase(diePhrase);
+	myPart.setBPM(60);
+	masterVolume(0.3);
 }
 
 function draw() {
@@ -46,7 +75,7 @@ function draw() {
 
 
 function playNote(key){
-	dino.jump();
+	dino.jump(key);
 	myPart.start();
 	console.log(key);
 	// key = key+;
@@ -65,15 +94,6 @@ function stopNote(){
 	wave2.amp(0,0.2);
 }
 
-function playBox(time, playbackRate) {
-	box.rate(playbackRate);
-	box.play(time);
-}
-
-function playDrum(time, playbackRate) {
-	drum.rate(playbackRate);
-	drum.play(time);
-}
 
 function toggle() {
 	if (!playing) {
@@ -86,14 +106,23 @@ function toggle() {
 		wave2.start();
 		wave2.amp(0);
 
-		masterVolume(0.1);
+		masterVolume(1);
 		let boxPhrase = new p5.Phrase('box', playBox, boxPat);
 		let drumPhrase = new p5.Phrase('drum', playDrum, drumPat);
 		myPart = new p5.Part();
 		myPart.addPhrase(boxPhrase);
 		myPart.addPhrase(drumPhrase);
 		myPart.setBPM(60);
-		masterVolume(0.1);
+		masterVolume(1);
+
+		noise = new p5.Noise('pink');
+		noiseLooper = new p5.SoundLoop(function(timeFromNow){
+			noise.start();
+			noise.amp(0.3);
+			noise.amp(0,0.2);
+			background(255 * (noiseLooper.iterations % 2));
+		}, 2);
+		noiseLooper.start();
 
 		playing = true;
 	} else {
@@ -117,10 +146,10 @@ function receiveOsc(address, value) {
 			}
 			else if(value == 1){
 				if(storeAdd[1]==1){
-					playNote(storeAdd[2].replace('push',''));
+					playNote(int(storeAdd[2].replace('push',''))+int(12));
 				}
 				else{
-					playNote(int(storeAdd[2].replace('push',''))-12);
+					playNote(int(storeAdd[2].replace('push','')));
 				}
 				
 			}
