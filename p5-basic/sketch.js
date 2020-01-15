@@ -21,6 +21,7 @@ let analyzer;
 
 let noise;
 let noiseLooper;
+let zee, fft;
 
 let uImg;
 let uImg2;
@@ -45,6 +46,8 @@ let axValue = 0;
 let ayValue = 0;
 let flowerPlaying = false;
 let groundPlaying = false;
+let dinoPlaying = false;
+let zeePlaying = false;
 
 function preload() {
 	uImg=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino1.png');
@@ -62,6 +65,8 @@ function preload() {
 
 	dindo = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dindo.mp3');
 	hoo = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hoo.mp3');
+
+	zee = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/zee.mp3');
 }
 
 
@@ -83,10 +88,20 @@ function draw() {
 		background('#08192D');
 	}
 		
-	fill(0, 255, 0);
-	ellipse(x, y, 100, 100);
-	fill(0);
-	text("I'm p5.js", x-25, y);
+	if(zeePlaying){
+		noFill();
+		// fill(255);
+		let spectrum = fft.analyze();
+
+		beginShape();
+		stroke(255);
+		for (i = 0; i < spectrum.length; i++) {
+			vertex(map(i,0,spectrum.length,0,width*2), map(spectrum[i], 0, 255, height/2, height/4));
+		}
+		endShape();
+		fill(255,map(rms,0,0.1,0,255));
+		rect(0,0,width,height);
+	}
 	
 	for (let g of ground) {
 		g.move();
@@ -99,8 +114,11 @@ function draw() {
 			playDie();
 		}
 	}
-	dino.show();
-	dino.move();
+	if(dinoPlaying){
+		dino.show();
+		dino.move();
+	}
+	
 	aniCount+=1;
 
 	if(flowerPlaying){
@@ -185,22 +203,17 @@ function receiveOsc(address, value) {
 		}
 		else if (storeAdd[2].search('toggle')>=0){
 			if(int(storeAdd[2].replace('toggle',''))==22){
-				if(value==0){
-					flowerPlaying=false;
+				if(value == 0){
+					zeePlaying = false;
 				}
 				else{
-					flowerPlaying=true;
+					zee.play();
+					fft = new p5.FFT();
+					fft.setInput(zee);
+					zeePlaying = true;
 				}
 			}
 			else if(int(storeAdd[2].replace('toggle',''))==23){
-				if(value==0){
-					axValue = 0;
-				}
-				else{
-					axValue = 1;
-				}
-			}
-			else if(int(storeAdd[2].replace('toggle',''))==24){
 				if(value==0){
 					for (let g of ground) {
 						ground.splice(g,1);
@@ -212,6 +225,23 @@ function receiveOsc(address, value) {
 					ground.push(new Ground ());
 				}
 			}
+			else if(int(storeAdd[2].replace('toggle',''))==24){
+				if(value==0){
+					flowerPlaying=false;
+				}
+				else{
+					flowerPlaying=true;
+				}
+			} 
+			else if(int(storeAdd[2].replace('toggle',''))==25){
+				if(value==0){
+					axValue = 0;
+				}
+				else{
+					axValue = 1;
+				}
+			}
+			
 			else{
 				if(value == 0){
 					stopPhrase(int(storeAdd[2].replace('toggle','')));
