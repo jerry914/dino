@@ -72,15 +72,17 @@ function setup() {
 	analyzer = new p5.Amplitude();
 
 	analyzer.setInput(myPart);
-	colorMode(HSB, 255)
+	colorMode(HSB, 255);
 }
 
 function draw() {
 	let rms = analyzer.getLevel();
 	if(rms>0.05 && !flowerPlaying)
 		background('#91989F');
-	else
+	else{
 		background('#08192D');
+	}
+		
 	fill(0, 255, 0);
 	ellipse(x, y, 100, 100);
 	fill(0);
@@ -94,12 +96,12 @@ function draw() {
 		t.move();
 		t.show();
 		if (dino.hits(t)) {
-			console.log('game over');
+			playDie();
 		}
 	}
 	dino.show();
 	dino.move();
-	aniCount++;
+	aniCount+=1;
 
 	if(flowerPlaying){
 		generateParticle();

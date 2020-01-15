@@ -12,6 +12,7 @@ function playDrum(time, playbackRate) {
 function playJump(time, playbackRate) {
     jump.rate(playbackRate);
     jump.play(time);
+    trees.push(new Tree());
 }
 
 function playAch(time, playbackRate) {

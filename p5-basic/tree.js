@@ -10,7 +10,7 @@ class Tree {
     constructor() {
         this.r = 75;
         this.x = width;
-        this.y = height/2 - this.r;
+        this.y = height/2 + this.r/2;
     }
 
     move() {
@@ -19,10 +19,6 @@ class Tree {
 
     show() {
         image(tImg, this.x, this.y, this.r/2, this.r);
-
-        // fill(255, 50);
-        // ellipseMode(CORNER);
-        // ellipse(this.x, this.y, this.r, this.r);
     }
 
 }
