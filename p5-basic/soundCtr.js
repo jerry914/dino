@@ -24,6 +24,16 @@ function playDie(time, playbackRate) {
     die.play(time);
 }
 
+function playdindo(time, playbackRate) {
+    die.rate(playbackRate);
+    die.play(time);
+}
+
+function playhoo(time, playbackRate) {
+    die.rate(playbackRate);
+    die.play(time);
+}
+
 function playNote(key){
 	dino.jump(key);
 	// myPart.start();
@@ -50,6 +60,8 @@ let drumPhrase = new p5.Phrase('drum', playDrum, drumPat);
 let jumpPhrase = new p5.Phrase('jump', playJump, jumpPat);
 let achPhrase = new p5.Phrase('ach', playAch,achPat);
 let diePhrase = new p5.Phrase('die', playDie,diePat);
+let dindoPhrase = new p5.Phrase('dindo', playdindo,dindoPat);
+let hooPhrase = new p5.Phrase('hoo', playhoo,hooPat);
 
 function playPhrase(phrase){
     myPart.start();
@@ -68,6 +80,12 @@ function playPhrase(phrase){
             break;
         case　5:
             myPart.addPhrase(diePhrase);
+            break;
+        case 6:
+            myPart.addPhrase(dindoPhrase);
+            break;
+        case 7:
+            myPart.addPhrase(hooPhrase);
             break;
         default:
             break;

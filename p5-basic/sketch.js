@@ -6,11 +6,13 @@ var playing = false;
 
 let box, drum, myPart;
 let jump,ach,die;
+let dindo,hoo;
 let boxPat = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 0, 0, 0];
 let drumPat = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0,0, 0, 1, 0,0, 0];
 let jumpPat = [1, 3,3, 1, 1, 2, 2, 0, 0, 1, 1, 3, 9, 3,2, 2];
 let achPat = [1, 0, 0, 0, 0, 0,  0, 0,1, 1, 1, 1, 0, 0, 1, 0];
 let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
+let onePat = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
 
 let filter = [];
 let filterFreq, filterRes;
@@ -53,6 +55,9 @@ function preload() {
 	jump = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/jump.mp3');
 	ach = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/achieve.wav');
 	die = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/demise.wav');
+
+	dindo = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dindo.mp3');
+	hoo = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hoo.mp3');
 }
 
 
