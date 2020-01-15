@@ -17,7 +17,7 @@
 	<script src="ground.js"></script>
 	<script src="tree.js"></script>
 	<script src="particle.js"></script>
-	<button class="startBtn" onclick="toggle()">Start</button>
+	<button class="startBtn" onclick="toggle()"></button>
 </body>
 
 </html>
@@ -27,5 +27,16 @@
 	position: absolute;
 	top: 0;
 	right: 0;
+}
+button{
+	background-image: url("https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/wifi.png");
+	background-size: 75px,75px;
+	background-color: rgba(255, 255, 255, 0);
+	width: 75px;
+	height: 75px;
+	border: 0px #FFF solid;
+}
+button:focus{
+	background-image: url("https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/wifiOn.png");
 }
 </style>

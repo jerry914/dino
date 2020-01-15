@@ -8,7 +8,7 @@ let box, drum, myPart;
 let jump,ach,die;
 let dindo,hoo;
 let boxPat = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 0, 0, 0];
-let drumPat = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0,0, 0, 1, 0,0, 0];
+let drumPat = [1, 2, 0, 2, 1, 0, 1, 2, 0, 2, 1, 0, 1, 0,0, 0];
 let jumpPat = [1, 3,3, 1, 1, 2, 2, 0, 0, 1, 1, 3, 9, 3,2, 2];
 let achPat = [1, 0, 0, 0, 0, 0,  0, 0,1, 1, 1, 1, 0, 0, 1, 0];
 let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
@@ -83,7 +83,7 @@ function setup() {
 function draw() {
 	let rms = analyzer.getLevel();
 	if(rms>0.05 && !flowerPlaying)
-		background('#91989F');
+		background('#FFE9E4');
 	else{
 		background('#08192D');
 	}
@@ -198,7 +198,6 @@ function receiveOsc(address, value) {
 				else{
 					playNote(int(storeAdd[2].replace('push','')));
 				}
-				
 			}
 		}
 		else if (storeAdd[2].search('toggle')>=0){
@@ -227,13 +226,21 @@ function receiveOsc(address, value) {
 			}
 			else if(int(storeAdd[2].replace('toggle',''))==24){
 				if(value==0){
+					dinoPlaying=false;
+				}
+				else{
+					dinoPlaying=true;
+				}
+			}
+			else if(int(storeAdd[2].replace('toggle',''))==25){
+				if(value==0){
 					flowerPlaying=false;
 				}
 				else{
 					flowerPlaying=true;
 				}
 			} 
-			else if(int(storeAdd[2].replace('toggle',''))==25){
+			else if(int(storeAdd[2].replace('toggle',''))==26){
 				if(value==0){
 					axValue = 0;
 				}
@@ -281,6 +288,14 @@ function receiveOsc(address, value) {
 		else if (storeAdd[2].search('nav')>=0){
 			if(int(storeAdd[2].replace('2nav',''))==1){
 				angleValue = 1;
+			}
+			else{
+				if(value == 0){
+					stopNote();
+				}
+				else if(value == 1){
+					playNote(int(storeAdd[2].replace('2nav','')));
+				}
 			}
 		}
 		else if (storeAdd[2].search('rotary')>=0){
