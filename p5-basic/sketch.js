@@ -44,9 +44,9 @@ let ayValue = 0;
 let flowerPlaying = false;
 
 function preload() {
-	uImg=loadImage('https://jerry914.github.io/pplant/assect/dino left ft.png');
-	uImg2=loadImage('https://jerry914.github.io/pplant/assect/dino right ft.png');
-	dinoJump=loadImage('https://jerry914.github.io/pplant/assect/Dino.png');
+	uImg=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino1.png');
+	uImg2=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino2.png');
+	dinoJump=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dinoJump.png');
 
 	bImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/ground.png');
 

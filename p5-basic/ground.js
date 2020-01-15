@@ -2,7 +2,7 @@ class Ground {
 
     constructor() {
         this.w = width;
-        this.h = 14;
+        this.h = 480;
         this.x = width;
         this.y = height-this.h;
     }
