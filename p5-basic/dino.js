@@ -9,8 +9,8 @@ class Dino {
 
     constructor() {
     this.r = 100;
-    this.x = 50;
-    this.y = height - this.r;
+    this.x = width/3;
+    this.y = height/2;
     this.vy = 0;
     this.gravity = 3;
     this.img=uImg;
@@ -18,7 +18,7 @@ class Dino {
     }
 
     jump(key) {
-    if (this.y == height - this.r) {
+    if (this.y == height/2) {
         this.vy = -(key*2);
     }
     
@@ -35,7 +35,7 @@ class Dino {
     move() {
     this.y += this.vy;
     this.vy += this.gravity;
-    this.y = constrain(this.y, 0, height - this.r);
+    this.y = constrain(this.y, 0, height/2);
     if(aniCount%6<=2){
         this.img=uImg;
     }
@@ -48,7 +48,7 @@ class Dino {
     else{
         this.img=uImg2;
     }*/
-    if(this.y<height - this.r){
+    if(this.y<height/2){
         this.img=dinoJump;
     }
     }

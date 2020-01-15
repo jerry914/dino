@@ -15,6 +15,8 @@ let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
 let filter = [];
 let filterFreq, filterRes;
 
+let analyzer;
+
 let noise;
 let noiseLooper;
 
@@ -58,19 +60,25 @@ function setup() {
 	createCanvas(windowWidth,windowHeight);
 	setupOsc(12000, 3334);
 	dino = new Dino();
+	analyzer = new p5.Amplitude();
 
+	analyzer.setInput(myPart);
 	colorMode(HSB, 255)
 }
 
 function draw() {
-	background('#08192D');
+	let rms = analyzer.getLevel();
+	if(rms>0.05 && !flowerPlaying)
+		background('#91989F');
+	else
+		background('#08192D');
 	fill(0, 255, 0);
 	ellipse(x, y, 100, 100);
 	fill(0);
 	text("I'm p5.js", x-25, y);
 	dino.show();
 	dino.move();
-	// aniCount++;
+	aniCount++;
 
 	if(flowerPlaying){
 		generateParticle();
@@ -162,7 +170,12 @@ function receiveOsc(address, value) {
 				}
 			}
 			else if(int(storeAdd[2].replace('toggle',''))==23){
-				axValue = 1;
+				if(value==0){
+					axValue = 0;
+				}
+				else{
+					axValue = 1;
+				}
 			}
 			else{
 				if(value == 0){
@@ -234,6 +247,7 @@ function setupOsc(oscPortIn, oscPortOut) {
 		}
 	});
 }
+
 function windowResized(){
 	resizeCanvas(windowWidth,windowHeight);
 }
