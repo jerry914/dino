@@ -25,13 +25,13 @@ function playDie(time, playbackRate) {
 }
 
 function playdindo(time, playbackRate) {
-    die.rate(playbackRate);
-    die.play(time);
+    dindo.rate(playbackRate);
+    dindo.play(time);
 }
 
 function playhoo(time, playbackRate) {
-    die.rate(playbackRate);
-    die.play(time);
+    hoo.rate(playbackRate);
+    hoo.play(time);
 }
 
 function playNote(key){
@@ -60,8 +60,8 @@ let drumPhrase = new p5.Phrase('drum', playDrum, drumPat);
 let jumpPhrase = new p5.Phrase('jump', playJump, jumpPat);
 let achPhrase = new p5.Phrase('ach', playAch,achPat);
 let diePhrase = new p5.Phrase('die', playDie,diePat);
-let dindoPhrase = new p5.Phrase('dindo', playdindo,dindoPat);
-let hooPhrase = new p5.Phrase('hoo', playhoo,hooPat);
+let dindoPhrase = new p5.Phrase('dindo', playdindo,onePat);
+let hooPhrase = new p5.Phrase('hoo', playhoo,onePat);
 
 function playPhrase(phrase){
     myPart.start();
@@ -108,6 +108,12 @@ function stopPhrase(phrase){
             break;
         case　5:
             myRemovePhrase('die');
+            break;
+        case 6:
+            myRemovePhrase('dindo');
+            break;
+        case 7:
+            myRemovePhrase('hoo');
             break;
         default:
             break;

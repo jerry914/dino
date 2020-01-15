@@ -65,6 +65,7 @@ function setup() {
 	createCanvas(windowWidth,windowHeight);
 	setupOsc(12000, 3334);
 	dino = new Dino();
+	ground.push(new Ground ());
 	analyzer = new p5.Amplitude();
 
 	analyzer.setInput(myPart);
@@ -84,6 +85,11 @@ function draw() {
 	dino.show();
 	dino.move();
 	aniCount++;
+
+	for (let g of ground) {
+		g.move();
+		g.show();
+	}
 
 	if(flowerPlaying){
 		generateParticle();
