@@ -7,9 +7,9 @@ var playing = false;
 let box, drum, myPart;
 let jump,ach,die;
 let dindo,hoo;
-let boxPat = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1, 0, 0, 0];
+let boxPat = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1];
 let drumPat = [1, 2, 0, 2, 1, 0, 1, 2, 0, 2, 1, 0, 1, 0,0, 0];
-let jumpPat = [1, 3,3, 1, 1, 2, 2, 0, 0, 1, 1, 3, 9, 3,2, 2];
+let jumpPat = [1, 0,0, 1, 1, 0, 0, 3, 0, 1, 0, 0, 9, 0,0, 0];
 let achPat = [1, 0, 0, 0, 0, 0,  0, 0,1, 1, 1, 1, 0, 0, 1, 0];
 let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
 let onePat = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
@@ -273,6 +273,7 @@ function receiveOsc(address, value) {
 				switch(int(storeAdd[2].replace('fader',''))){
 					case 1:
 						angleValue = map(value,0,1,0,0.1);
+						myPart.setBPM(value,0,1,60,120);
 						break;
 					case 2:
 						radderValue = map(value,0,1,-0.05,0.05);
