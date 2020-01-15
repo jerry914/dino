@@ -35,6 +35,8 @@ let bImg;
 
 let dino;
 
+let beginVideo;
+
 let angle = 0;
 particles = [];
 let angleValue = 1;
@@ -78,6 +80,9 @@ function setup() {
 
 	analyzer.setInput(myPart);
 	colorMode(HSB, 255);
+
+	beginVideo = createVideo("https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/begin.mp4");
+	beginVideo.hide();
 }
 
 function draw() {
@@ -87,7 +92,7 @@ function draw() {
 	else{
 		background('#08192D');
 	}
-		
+	image(beginVideo, 0, 0,width,height);
 	if(zeePlaying){
 		noFill();
 		// fill(255);
@@ -222,6 +227,7 @@ function receiveOsc(address, value) {
 				else{
 					groundPlaying = true;
 					ground.push(new Ground ());
+					beginVideo.play();
 				}
 			}
 			else if(int(storeAdd[2].replace('toggle',''))==24){
