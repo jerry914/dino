@@ -52,7 +52,7 @@ function generateParticle() {
         particles[i].update();
         particles[i].show();
         if (particles[i].finished()) {
-        particles.splice(i, 1);
+            particles.splice(i, 1);
         }
     }
 }

@@ -24,10 +24,12 @@ let noiseLooper;
 
 let uImg;
 let uImg2;
+let tImg;
 let dinoJump;
 let aniCount=0 ;
 
 let ground = [];
+let trees = [];
 let bImg;
 
 let dino;
@@ -42,6 +44,7 @@ let colorValue = 10;
 let axValue = 0;
 let ayValue = 0;
 let flowerPlaying = false;
+let groundPlaying = false;
 
 function preload() {
 	uImg=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino1.png');
@@ -49,6 +52,7 @@ function preload() {
 	dinoJump=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dinoJump.png');
 
 	bImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/ground.png');
+	tImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/tree.png');
 
 	box = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hanning.mp3');
 	drum = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/kick.wav');
@@ -65,7 +69,6 @@ function setup() {
 	createCanvas(windowWidth,windowHeight);
 	setupOsc(12000, 3334);
 	dino = new Dino();
-	ground.push(new Ground ());
 	analyzer = new p5.Amplitude();
 
 	analyzer.setInput(myPart);
@@ -82,14 +85,21 @@ function draw() {
 	ellipse(x, y, 100, 100);
 	fill(0);
 	text("I'm p5.js", x-25, y);
-	dino.show();
-	dino.move();
-	aniCount++;
-
+	
 	for (let g of ground) {
 		g.move();
 		g.show();
 	}
+	for (let t of trees) {
+		t.move();
+		t.show();
+		if (dino.hits(t)) {
+			console.log('game over');
+		}
+	}
+	dino.show();
+	dino.move();
+	aniCount++;
 
 	if(flowerPlaying){
 		generateParticle();
@@ -186,6 +196,18 @@ function receiveOsc(address, value) {
 				}
 				else{
 					axValue = 1;
+				}
+			}
+			else if(int(storeAdd[2].replace('toggle',''))==24){
+				if(value==0){
+					for (let g of ground) {
+						ground.splice(g,1);
+					}
+					groundPlaying = false;
+				}
+				else{
+					groundPlaying = true;
+					ground.push(new Ground ());
 				}
 			}
 			else{
