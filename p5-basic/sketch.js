@@ -14,6 +14,8 @@ let achPat = [1, 0, 0, 0, 0, 0,  0, 0,1, 1, 1, 1, 0, 0, 1, 0];
 let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
 let onePat = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
 
+let compos1 = [];
+
 let filter = [];
 let filterFreq, filterRes;
 
@@ -36,6 +38,7 @@ let bImg;
 let dino;
 
 let beginVideo;
+let tranVideo;
 
 let angle = 0;
 particles = [];
@@ -50,6 +53,7 @@ let flowerPlaying = false;
 let groundPlaying = false;
 let dinoPlaying = false;
 let zeePlaying = false;
+let tranPlaying = false;
 
 function preload() {
 	uImg=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino1.png');
@@ -69,6 +73,10 @@ function preload() {
 	hoo = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hoo.mp3');
 
 	zee = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/zee.mp3');
+	compos1[0] = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/melody1.wav');
+	compos1[1] = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/chor1.wav');
+	compos1[2] = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/syn1.wav');
+	compos1[3] = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/bass1.wav');
 }
 
 
@@ -82,7 +90,9 @@ function setup() {
 	colorMode(HSB, 255);
 
 	beginVideo = createVideo("https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/begin.mp4");
+	tranVideo = createVideo("https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/trans1.mp4");
 	beginVideo.hide();
+	tranVideo.hide();
 }
 
 function draw() {
@@ -92,7 +102,12 @@ function draw() {
 	else{
 		background('#08192D');
 	}
-	image(beginVideo, 0, 0,width,height);
+	if(groundPlaying){
+		image(beginVideo, 0, 0,width,height);
+	}
+	if(tranPlaying){
+		image(tranVideo,0,0,width,height);
+	}
 	if(zeePlaying){
 		noFill();
 		// fill(255);
@@ -158,14 +173,18 @@ function toggle() {
 		
 		box.disconnect();
 		box.connect(filter[0]);
-		drum.disconnect();
-		drum.connect(filter[1]);
-		jump.disconnect();
-		jump.connect(filter[2]);
-		ach.disconnect();
-		ach.connect(filter[3]);
-		die.disconnect();
-		die.connect(filter[4]);
+		// drum.disconnect();
+		// drum.connect(filter[1]);
+		// jump.disconnect();
+		// jump.connect(filter[2]);
+		// ach.disconnect();
+		// ach.connect(filter[3]);
+		// die.disconnect();
+		// die.connect(filter[4]);
+		for(var i=1;i<=4;i++){
+			compos1[i].disconnect();
+			compos1[i].connect(filter[i]);
+		}
 		masterVolume(0.3);
 		// noise = new p5.Noise('pink');
 		// noiseLooper = new p5.SoundLoop(function(timeFromNow){
@@ -206,7 +225,17 @@ function receiveOsc(address, value) {
 			}
 		}
 		else if (storeAdd[2].search('toggle')>=0){
-			if(int(storeAdd[2].replace('toggle',''))==22){
+			let toggleIdx = int(storeAdd[2].replace('toggle',''));
+			if(toggleIdx>=15 && toggleIdx<19){
+				if(value == 0){
+					compos1[toggleIdx-15].stop();
+				}
+				else{
+					compos1[toggleIdx-15].loop();
+					compos1[toggleIdx-15].play();
+				}
+			}
+			if(toggleIdx==22){
 				if(value == 0){
 					zeePlaying = false;
 				}
@@ -217,7 +246,7 @@ function receiveOsc(address, value) {
 					zeePlaying = true;
 				}
 			}
-			else if(int(storeAdd[2].replace('toggle',''))==23){
+			else if(toggleIdx==23){
 				if(value==0){
 					for (let g of ground) {
 						ground.splice(g,1);
@@ -230,7 +259,17 @@ function receiveOsc(address, value) {
 					beginVideo.play();
 				}
 			}
-			else if(int(storeAdd[2].replace('toggle',''))==24){
+			else if(toggleIdx==30){
+				if(value==0){
+					tranPlaying = false;
+				}
+				else{
+					tranPlaying = true;
+					tranVideo.play();
+					tranVideo.loop();
+				}
+			}
+			else if(toggleIdx==24){
 				if(value==0){
 					dinoPlaying=false;
 				}
@@ -238,7 +277,7 @@ function receiveOsc(address, value) {
 					dinoPlaying=true;
 				}
 			}
-			else if(int(storeAdd[2].replace('toggle',''))==25){
+			else if(toggleIdx==25){
 				if(value==0){
 					flowerPlaying=false;
 				}
@@ -246,7 +285,7 @@ function receiveOsc(address, value) {
 					flowerPlaying=true;
 				}
 			} 
-			else if(int(storeAdd[2].replace('toggle',''))==26){
+			else if(toggleIdx==26){
 				if(value==0){
 					axValue = 0;
 				}
@@ -257,10 +296,10 @@ function receiveOsc(address, value) {
 			
 			else{
 				if(value == 0){
-					stopPhrase(int(storeAdd[2].replace('toggle','')));
+					stopPhrase(toggleIdx);
 				}
 				else{
-					playPhrase(int(storeAdd[2].replace('toggle','')));
+					playPhrase(toggleIdx);
 				}
 			}
 		}
@@ -273,7 +312,6 @@ function receiveOsc(address, value) {
 				switch(int(storeAdd[2].replace('fader',''))){
 					case 1:
 						angleValue = map(value,0,1,0,0.1);
-						myPart.setBPM(value,0,1,60,120);
 						break;
 					case 2:
 						radderValue = map(value,0,1,-0.05,0.05);

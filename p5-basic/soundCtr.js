@@ -12,12 +12,13 @@ function playDrum(time, playbackRate) {
 function playJump(time, playbackRate) {
     jump.rate(playbackRate);
     jump.play(time);
-    trees.push(new Tree());
+    dino.jump(7);
 }
 
 function playAch(time, playbackRate) {
     ach.rate(playbackRate);
     ach.play(time);
+    trees.push(new Tree());
 }
 
 function playDie(time, playbackRate) {
