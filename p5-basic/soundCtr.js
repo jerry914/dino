@@ -34,6 +34,7 @@ function playdindo(time, playbackRate) {
 function playhoo(time, playbackRate) {
     hoo.rate(playbackRate);
     hoo.play(time);
+    cloud.push(new Cloud ());
 }
 
 function playNote(key){

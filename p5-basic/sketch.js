@@ -7,11 +7,11 @@ var playing = false;
 let box, drum, myPart;
 let jump,ach,die;
 let dindo,hoo;
-let boxPat = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1];
-let drumPat = [1, 2, 0, 2, 1, 0, 1, 2, 0, 2, 1, 0, 1, 0,0, 0];
-let jumpPat = [1, 0,0, 1, 1, 0, 0, 3, 0, 1, 0, 0, 9, 0,0, 0];
-let achPat = [1, 0, 0, 0, 0, 0,  0, 0,1, 1, 1, 1, 0, 0, 1, 0];
-let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0];
+let boxPat = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1,1, 1, 1, 1];
+let drumPat = [1, 2, 0, 2, 1, 0, 1, 2, 0, 2, 1, 0, 1, 0,0, 0, 1, 0,0, 0, 1, 0,4, 3];
+let jumpPat = [1, 0,0, 1, 1, 0, 0, 3, 0, 1, 0, 0, 9, 0,0, 0,1,2,3,0,4,4,1,0];
+let achPat = [1, 0, 0, 0, 0, 0,  0, 0,1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0];
+let diePat = [1, 0, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0];
 let onePat = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
 
 let compos1 = [];
@@ -33,8 +33,10 @@ let aniCount=0 ;
 
 let ground = [];
 let trees = [];
+let cloud = [];
 let bImg;
-
+let cImg;
+let dinoImg;
 let dino;
 
 let beginVideo;
@@ -54,14 +56,17 @@ let groundPlaying = false;
 let dinoPlaying = false;
 let zeePlaying = false;
 let tranPlaying = false;
+let randioPlaying = false;
 
 function preload() {
+	dinoImg=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino.gif');
 	uImg=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino1.png');
 	uImg2=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dino2.png');
 	dinoJump=loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/dinoJump.png');
 
 	bImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/ground.png');
 	tImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/tree.png');
+	cImg = loadImage('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/cloud.png');
 
 	box = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/hanning.mp3');
 	drum = loadSound('https://raw.githubusercontent.com/jerry914/dino/master/p5-basic/assets/kick.wav');
@@ -99,6 +104,9 @@ function draw() {
 	let rms = analyzer.getLevel();
 	if(rms>0.05 && !flowerPlaying)
 		background('#FFE9E4');
+	else if(randioPlaying){
+		image(dinoImg,random(width/51)*51,random(height/51)*51);
+	}
 	else{
 		background('#08192D');
 	}
@@ -126,6 +134,10 @@ function draw() {
 	for (let g of ground) {
 		g.move();
 		g.show();
+	}
+	for (let c of cloud) {
+		c.move();
+		c .show();
 	}
 	for (let t of trees) {
 		t.move();
@@ -267,6 +279,14 @@ function receiveOsc(address, value) {
 					tranPlaying = true;
 					tranVideo.play();
 					tranVideo.loop();
+				}
+			}
+			else if(toggleIdx==31){
+				if(value==0){
+					randioPlaying = false;
+				}
+				else{
+					randioPlaying = true;
 				}
 			}
 			else if(toggleIdx==24){
