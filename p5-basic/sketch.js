@@ -102,6 +102,7 @@ function setup() {
 
 function draw() {
 	let rms = analyzer.getLevel();
+	// sendOsc('/rms',rms);
 	if(rms>0.05 && !flowerPlaying)
 		background('#FFE9E4');
 	else if(randioPlaying){
@@ -193,7 +194,7 @@ function toggle() {
 		// ach.connect(filter[3]);
 		// die.disconnect();
 		// die.connect(filter[4]);
-		for(var i=1;i<=4;i++){
+		for(var i=1;i<4;i++){
 			compos1[i].disconnect();
 			compos1[i].connect(filter[i]);
 		}
@@ -369,13 +370,13 @@ function receiveOsc(address, value) {
 	}
 	
 }
-
+var socket = io.connect('http://127.0.0.1:8081', { port: 8081, rememberTransport: false });
 function sendOsc(address, value) {
 	socket.emit('message', [address].concat(value));
 }
 
 function setupOsc(oscPortIn, oscPortOut) {
-	var socket = io.connect('http://127.0.0.1:8081', { port: 8081, rememberTransport: false });
+	
 	socket.on('connect', function() {
 		socket.emit('config', {	
 			server: { port: oscPortIn,  host: '127.0.0.1'},

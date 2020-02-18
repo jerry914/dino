@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Cherry Pickr</h1>
+        <img src="https://pxt.azureedge.net/blob/4f7cf599f42129cf192fdd08d34f7b7974558006/static/lessons/cherry-pickr/cherry-pickr.png" alt="">
+        <p>Collect as many cherries as you can before time runs out!</p>
+        <h1>學習目標</h1>
+        <p>Learn the basic requirements to build a functional game!</p>
+        <ul>
+        <li><a  href="#part-one-start-the-game">第一部分：開始遊戲</a></li>
+        <li><a  rel="nofollow noopener" href="#part-two-set-the-background">第二部分：設定背景</a></li>
+        <li><a  rel="nofollow noopener" href="#part-three-create-and-move-the-player">第三部分：創建和移動玩家</a></li>
+        <li><a  rel="nofollow noopener" href="#part-four-spawn-cherries-on-the-screen">第四部分：畫面上生成櫻桃</a></li>
+        <li><a  rel="nofollow noopener" href="#part-five-keep-track-of-the-score-and-time">第五部分：記錄得分和時間</a></li>
+        <li><a  rel="nofollow noopener" href="#part-six-picking-up-cherries">第六部分：撿起櫻桃</a></li></ul>
+        <h2 id="-">第一部分：開始遊戲</h2><p>Go to the <a target="_blank" rel="nofollow noopener" href="https://arcade.makecode.com/">MakeCode Arcade</a> editor and select <strong>New Project</strong> to begin creating a new game.</p>
+<p>Once the editor loads, you will see a green <code>||loops:on start||</code> block already placed in the editor Workspace.</p>
+<p>We want the game to start with a <em>Title Screen</em> to let the player know what game they are playing. To do that, we go to <code>||game:Game||</code> in the Toolbox and under the <strong>Prompt</strong> category, drag a <code>||game:splash||</code> block into the <code>||loops:on start||</code> block. Give your game a title and put in as the text for the <code>||game:splash||</code> block.</p>
+<pre><code class="lang-blocks">game.splash(&quot;Cherry Pickr&quot;)</code></pre>
+<h2 id="-">第二部分：設定背景</h2><p>To set the background, click on <code>||scene:Scene||</code> in the Toolbox and drag the <code>||scene:set tilemap to||</code> block into the <code>||loops:on start||</code> block. Go ahead and click the gray box and draw whatever you want the background to look like .</p>
+<pre><code class="lang-blocks">game.splash(&quot;Cherry Pickr&quot;)
+namespace myTiles {
+    //% blockIdentity=images._tile
+    export const tile0 = img`
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+    `
+    //% blockIdentity=images._tile
+    export const tile1 = img`
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+        6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+    `
+    //% blockIdentity=images._tile
+    export const tile2 = img`
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+        3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+    `
+    //% blockIdentity=images._tile
+    export const tile3 = img`
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+        5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+    `
+    //% blockIdentity=images._tile
+    export const tile4 = img`
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7
+    `
+    //% blockIdentity=images._tile
+    export const tile5 = img`
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+        9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+    `
+    //% blockIdentity=images._tile
+    export const tile6 = img`
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+        4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
+    `
+    //% blockIdentity=images._tile
+    export const tile7 = img`
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    `
+    //% blockIdentity=images._tile
+    export const tile8 = img`
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+        c c c c c c c c c c c c c c c c
+    `
+}
+tiles.setTilemap(tiles.createTilemap(
+    hex`0a0008000101010101010101010102020202020202020202030303030303030303030404040404040404040405050505050505050505060606060606060606060707070707070707070708080808080808080808`,
+    img`
+        . . . . . . . . . .
+        . . . . . . . . . .
+        . . . . . . . . . .
+        . . . . . . . . . .
+        . . . . . . . . . .
+        . . . . . . . . . .
+        . . . . . . . . . .
+        . . . . . . . . . .
+    `,
+    [myTiles.tile0,myTiles.tile1,myTiles.tile2,myTiles.tile3,myTiles.tile4,myTiles.tile5,myTiles.tile6,myTiles.tile7,myTiles.tile8],
+    TileScale.Sixteen
+))</code></pre>
+    </body>
+</html>
