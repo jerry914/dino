@@ -1,5 +1,5 @@
 
-var socket = io.connect('http://192.168.43.174:8081', { port: 8081, rememberTransport: false });
+var socket = io.connect('http://IP:8081', { port: 8081, rememberTransport: false });
 
 function setup() {
 	createCanvas(windowWidth,windowHeight);
@@ -24,8 +24,8 @@ function setupOsc(oscPortIn, oscPortOut) {
 	
 	socket.on('connect', function() {
 		socket.emit('config', {	
-			server: { port: oscPortIn,  host: '192.168.43.174'},
-			client: { port: oscPortOut, host: '192.168.43.174'}
+			server: { port: oscPortIn,  host: 'IP'},
+			client: { port: oscPortOut, host: 'IP'}
 		});
 	});
 	socket.on('message', function(msg) {
